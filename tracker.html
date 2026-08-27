@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lifedrop | Live Emergency Blood Request Tracker</title>
-  <meta name="description" content="Track your emergency blood request dispatch in real time. Transparent timeline of donor responses and hospital arrival.">
+  <title>Lifedrop Shivamogga | Live Emergency Request Tracker</title>
+  <meta name="description" content="Track your emergency blood request dispatch in Shivamogga hospitals in real time. Transparent timeline of donor responses and hospital arrival.">
   <meta name="theme-color" content="#E11D48">
 
   <!-- Stylesheets & Favicon -->
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/chat.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
 </head>
 <body>
@@ -109,6 +110,17 @@
             </a>
 
             <div class="menu-dropdown-divider"></div>
+            <div class="menu-dropdown-section-title">Downloads & Documentation</div>
+            <a href="/download/presentation" class="menu-dropdown-item" download>
+              <span class="menu-dropdown-icon">📊</span>
+              <span>Download PPT Slides</span>
+            </a>
+            <a href="/download/document" class="menu-dropdown-item" download>
+              <span class="menu-dropdown-icon">📄</span>
+              <span>Download Word Doc</span>
+            </a>
+
+            <div class="menu-dropdown-divider"></div>
             <div class="menu-dropdown-section-title">Quick Actions</div>
             <a href="javascript:void(0)" class="menu-dropdown-item" onclick="window.lifedropApp.toggle3DotMenu(false); window.lifedropApp.openRequestModal();">
               <span class="menu-dropdown-icon">➕</span>
@@ -132,9 +144,9 @@
   <div class="page-title-banner">
     <div class="container page-banner-grid">
       <div>
-        <h1 class="page-banner-title">Live Emergency Request Tracker</h1>
+        <h1 class="page-banner-title">Shivamogga Request Tracker</h1>
         <p class="page-banner-subtitle">
-          Enter your Request ID or mobile number to view real-time donor confirmations, hospital dispatch status, and timeline updates.
+          Enter your Request ID or mobile number to view real-time donor confirmations, McGann / Sahyadri hospital dispatch status, and direct map navigation.
         </p>
       </div>
       <div>
@@ -151,16 +163,16 @@
     <!-- Search Bar -->
     <div class="tracker-search-wrap">
       <div class="tracker-search-bar">
-        <input type="text" id="tracker-query-input" class="form-control" placeholder="Enter Request ID (e.g. REQ-1042 or REQ-2041)" value="REQ-1042">
+        <input type="text" id="tracker-query-input" class="form-control" placeholder="Enter Request ID (e.g. REQ-1001 or REQ-1002)" value="REQ-1001">
         <button class="btn btn-primary" onclick="window.lifedropApp.trackRequestId(document.getElementById('tracker-query-input').value)">
           🔍 Track Status
         </button>
       </div>
       <div style="display: flex; gap: 8px; justify-content: center; margin-top: 10px; font-size: 0.78rem; color: var(--text-muted);">
         <span>Quick Samples:</span>
-        <a href="javascript:void(0)" style="color: var(--crimson-500); font-weight: 700;" onclick="window.lifedropApp.trackRequestId('REQ-1042')">REQ-1042</a> •
-        <a href="javascript:void(0)" style="color: var(--crimson-500); font-weight: 700;" onclick="window.lifedropApp.trackRequestId('REQ-2041')">REQ-2041</a> •
-        <a href="javascript:void(0)" style="color: var(--crimson-500); font-weight: 700;" onclick="window.lifedropApp.trackRequestId('REQ-4012')">REQ-4012</a>
+        <a href="javascript:void(0)" style="color: var(--crimson-500); font-weight: 700;" onclick="window.lifedropApp.trackRequestId('REQ-1001')">REQ-1001 (McGann)</a> •
+        <a href="javascript:void(0)" style="color: var(--crimson-500); font-weight: 700;" onclick="window.lifedropApp.trackRequestId('REQ-1002')">REQ-1002 (Sahyadri)</a> •
+        <a href="javascript:void(0)" style="color: var(--crimson-500); font-weight: 700;" onclick="window.lifedropApp.trackRequestId('REQ-1003')">REQ-1003 (Nanjappa)</a>
       </div>
     </div>
 
@@ -250,8 +262,8 @@
       <button class="suggestion-pill" onclick="window.lifedropApp.sendChatMessage('🚨 Urgent blood request')">🚨 Emergency</button>
     </div>
     <div class="chat-input-area">
-      <input type="text" id="chat-user-input" class="chat-input-field" placeholder="Type your query...">
-      <button id="chat-send-trigger" class="chat-send-btn">➤</button>
+      <input type="text" id="chat-user-input" class="chat-input-field" placeholder="Type your query..." onkeydown="if(event.key==='Enter'){event.preventDefault();window.lifedropApp.sendChatMessage();}">
+      <button id="chat-send-trigger" class="chat-send-btn" title="Send" onclick="window.lifedropApp.sendChatMessage()">➤</button>
     </div>
   </div>
 
@@ -328,16 +340,19 @@
   <div id="toast-container" class="toast-container"></div>
 
   <!-- Scripts -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="js/data.js"></script>
+  <script src="js/api.js"></script>
   <script src="js/storage.js"></script>
   <script src="js/assistant.js"></script>
+  <script src="js/map.js"></script>
   <script src="js/tracker.js"></script>
   <script src="js/app.js"></script>
   <script>
-    // Auto-track on load if parameter is in URL or default to REQ-1042
+    // Auto-track on load if parameter is in URL or default to REQ-1001 (McGann Hospital)
     document.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
-      const reqId = urlParams.get('req') || 'REQ-1042';
+      const reqId = urlParams.get('req') || 'REQ-1001';
       setTimeout(() => {
         window.lifedropApp.trackRequestId(reqId);
       }, 100);

@@ -32,11 +32,11 @@ class LifedropApp {
     this.renderDashboard();
     this.initEligibilityQuiz();
 
-    // 6. Setup Event Listeners
-    this.setupEventListeners();
-
-    // 7. Initialize Chat UI
+    // 6. Initialize Chat UI
     this.initChatUI();
+
+    // 7. Setup Event Listeners
+    this.setupEventListeners();
 
     // 8. Setup Live Donor Hero Card Preview
     const user = window.lifedropStorage.getCurrentUser();
@@ -679,8 +679,29 @@ class LifedropApp {
   }
 
   respondToRequest(reqId, bloodGroup) {
-    this.showToast(`Directing you to coordinate donation for ${reqId} (${bloodGroup}).`);
-    this.openEmergencyChat(`I am ready to donate ${bloodGroup} for request ${reqId}`);
+    let req = null;
+    if (window.lifedropStorage) {
+      req = window.lifedropStorage.getRequestById(reqId);
+    }
+    if (!req) {
+      req = {
+        id: reqId || 'REQ-EMERGENCY',
+        bloodGroup: bloodGroup || 'O+',
+        hospital: 'District Hospital & Trauma Center',
+        city: 'Shivamogga',
+        patientName: 'Emergency Patient',
+        units: 1,
+        urgency: 'Emergency',
+        contactPhone: '108'
+      };
+    }
+
+    if (window.lifedropMap) {
+      window.lifedropMap.openNavigationModal(req);
+    } else {
+      this.showToast(`Directing you to coordinate donation for ${reqId} (${bloodGroup}).`);
+      this.openEmergencyChat(`I am ready to donate ${bloodGroup} for request ${reqId}`);
+    }
   }
 
   openDonorCardModal(donorId) {
@@ -734,12 +755,32 @@ class LifedropApp {
     this.chatBody = document.getElementById('chat-messages-body');
     this.chatInput = document.getElementById('chat-user-input');
     this.chatSendBtn = document.getElementById('chat-send-trigger');
+    this.chatSessionId = localStorage.getItem('lifedrop_chat_session') || ('session_' + Date.now());
+    localStorage.setItem('lifedrop_chat_session', this.chatSessionId);
+
+    // Bind Enter key on input field directly
+    if (this.chatInput) {
+      this.chatInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          this.sendChatMessage();
+        }
+      });
+    }
+
+    // Bind Send button click directly
+    if (this.chatSendBtn) {
+      this.chatSendBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.sendChatMessage();
+      });
+    }
 
     if (this.chatBody && this.chatBody.children.length === 0) {
       this.appendMessage(
         'assistant',
-        'Hello! I am the Lifedrop Assistant. How can I assist you right now?',
-        ['🚨 Urgent Blood Request', '❤️ Register as Donor', '🔍 Track Request REQ-1042', '❓ Eligibility Criteria']
+        'Hello! I am the Lifedrop Emergency Assistant. How can I assist you right now?',
+        ['🚨 Urgent Blood Request', '❤️ Register as Donor', '🔍 Track Request REQ-1001', '🩸 Check Inventory', '❓ Eligibility Criteria']
       );
     }
   }
@@ -748,8 +789,11 @@ class LifedropApp {
     if (!this.chatOverlay) return;
     const shouldOpen = forceState !== null ? forceState : !this.chatOverlay.classList.contains('active');
     this.chatOverlay.classList.toggle('active', shouldOpen);
-    if (shouldOpen && this.chatInput) {
-      setTimeout(() => this.chatInput.focus(), 150);
+    if (shouldOpen) {
+      const inputEl = this.chatInput || document.getElementById('chat-user-input');
+      if (inputEl) {
+        setTimeout(() => inputEl.focus(), 150);
+      }
     }
   }
 
@@ -760,6 +804,44 @@ class LifedropApp {
         this.sendChatMessage(initialPrompt);
       }, 200);
     }
+  }
+
+  formatMessageContent(text) {
+    if (!text) return '';
+    let formatted = this.escapeHTML(text);
+    // Bold: **text**
+    formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    // Italic: *text* or _text_
+    formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
+    formatted = formatted.replace(/_(.*?)_/g, '<em>$1</em>');
+    // Inline code: `text`
+    formatted = formatted.replace(/`(.*?)`/g, '<code>$1</code>');
+    return formatted;
+  }
+
+  showChatTyping() {
+    if (!this.chatBody) return;
+    this.hideChatTyping();
+    const typingEl = document.createElement('div');
+    typingEl.id = 'chat-typing-indicator';
+    typingEl.className = 'chat-message assistant';
+    typingEl.innerHTML = `
+      <div class="message-avatar">
+        <img src="assets/logo.svg" alt="AI" style="width: 18px; height: 18px;">
+      </div>
+      <div>
+        <div class="message-bubble" style="color: var(--text-dim); font-style: italic; display: flex; align-items: center; gap: 4px;">
+          <span>Assistant is typing</span><span class="typing-dots">...</span>
+        </div>
+      </div>
+    `;
+    this.chatBody.appendChild(typingEl);
+    this.chatBody.scrollTop = this.chatBody.scrollHeight;
+  }
+
+  hideChatTyping() {
+    const el = document.getElementById('chat-typing-indicator');
+    if (el) el.remove();
   }
 
   appendMessage(sender, text, quickReplies = []) {
@@ -777,10 +859,11 @@ class LifedropApp {
     `;
 
     let quickRepliesHtml = '';
-    if (quickReplies && quickReplies.length > 0) {
+    const replies = quickReplies || [];
+    if (replies && replies.length > 0) {
       quickRepliesHtml = `
         <div class="chat-action-chips-wrap">
-          ${quickReplies.map(qr => `<button type="button" class="chat-action-chip" onclick="window.lifedropApp.sendChatMessage('${this.escapeHTML(qr)}')">${this.escapeHTML(qr)}</button>`).join('')}
+          ${replies.map(qr => `<button type="button" class="chat-action-chip" onclick="window.lifedropApp.sendChatMessage('${this.escapeHTML(qr)}')">${this.escapeHTML(qr)}</button>`).join('')}
         </div>
       `;
     }
@@ -790,7 +873,7 @@ class LifedropApp {
     msgEl.innerHTML = `
       ${avatarHtml}
       <div>
-        <div class="message-bubble">${this.escapeHTML(text)}</div>
+        <div class="message-bubble">${this.formatMessageContent(text)}</div>
         ${quickRepliesHtml}
         <span class="message-timestamp">${timeStr}</span>
       </div>
@@ -800,24 +883,70 @@ class LifedropApp {
     this.chatBody.scrollTop = this.chatBody.scrollHeight;
   }
 
-  sendChatMessage(customText = null) {
-    const text = customText || (this.chatInput ? this.chatInput.value.trim() : '');
+  async sendChatMessage(customText = null) {
+    const inputEl = this.chatInput || document.getElementById('chat-user-input');
+    const text = (customText !== null && customText !== undefined) 
+      ? String(customText).trim() 
+      : (inputEl ? inputEl.value.trim() : '');
+      
     if (!text) return;
 
-    if (!customText && this.chatInput) {
-      this.chatInput.value = '';
+    // Clear input field if query was typed by user
+    if ((customText === null || customText === undefined) && inputEl) {
+      inputEl.value = '';
     }
 
     this.appendMessage('user', text);
+    this.showChatTyping();
 
-    setTimeout(() => {
-      if (window.lifedropAssistant) {
-        const response = window.lifedropAssistant.processUserInput(text);
-        this.appendMessage('assistant', response.message, response.quickReplies);
+    if (!this.chatSessionId) {
+      this.chatSessionId = 'session_' + Math.random().toString(36).substring(2, 9);
+    }
+
+    try {
+      let response = null;
+      if (window.lifedropApi) {
+        response = await window.lifedropApi.chatWithAssistant(text, this.chatSessionId);
+      }
+
+      this.hideChatTyping();
+
+      if (response && response.success) {
+        const replyText = response.reply || response.message || "I've processed your request.";
+        const actions = response.actions || response.quickReplies || [];
+        this.appendMessage('assistant', replyText, actions);
+
+        // If emergency request was created on backend, sync data
+        if (response.data && (response.data.request || response.data.requestId)) {
+          if (window.lifedropStorage && response.data.request) {
+            window.lifedropStorage.addRequest(response.data.request);
+          }
+          window.dispatchEvent(new CustomEvent('lifedrop:sync-completed'));
+        }
+
+        // If donor was registered on backend, sync data
+        if (response.data && response.data.donor) {
+          if (window.lifedropStorage) {
+            window.lifedropStorage.addDonor(response.data.donor);
+          }
+          window.dispatchEvent(new CustomEvent('lifedrop:donors-updated'));
+        }
+      } else if (window.lifedropAssistant) {
+        const fallbackRes = await window.lifedropAssistant.processUserInput(text);
+        this.appendMessage('assistant', fallbackRes.message || fallbackRes.reply, fallbackRes.quickReplies || fallbackRes.actions);
       } else {
         this.appendMessage('assistant', "I'm routing your request to nearby blood banks and emergency donors immediately.");
       }
-    }, 400);
+    } catch (err) {
+      console.error('[ChatUI Error]', err);
+      this.hideChatTyping();
+      if (window.lifedropAssistant) {
+        const fallbackRes = await window.lifedropAssistant.processUserInput(text);
+        this.appendMessage('assistant', fallbackRes.message || fallbackRes.reply, fallbackRes.quickReplies || fallbackRes.actions);
+      } else {
+        this.appendMessage('assistant', "I'm routing your request to nearby blood banks and emergency donors immediately.");
+      }
+    }
   }
 
   initFaqAccordion() {
@@ -839,6 +968,24 @@ class LifedropApp {
   }
 
   setupEventListeners() {
+    window.addEventListener('lifedrop:sync-completed', () => {
+      this.renderDonorDirectory();
+      this.renderEmergencyFeed();
+      this.renderHeroStats();
+      this.renderDashboard();
+      const user = window.lifedropStorage.getCurrentUser();
+      const donor = user || window.lifedropStorage.getDonors()[0];
+      if (donor && this.tracker) {
+        this.tracker.generateHeroCard(donor);
+      }
+    });
+
+    window.addEventListener('lifedrop:backend-status', (e) => {
+      if (e.detail && e.detail.online) {
+        console.log('⚡ Lifedrop Backend Connected:', e.detail.service);
+      }
+    });
+
     window.addEventListener('lifedrop:donors-updated', () => {
       this.renderDonorDirectory();
       this.renderHeroStats();

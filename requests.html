@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lifedrop | Active Emergency Blood Requests</title>
-  <meta name="description" content="View and respond to urgent emergency blood requests. Rapid donor matching for hospitals and trauma centers.">
+  <title>Lifedrop Shivamogga | Active Emergency Blood Requests</title>
+  <meta name="description" content="View and respond to urgent emergency blood requests across McGann Hospital, Nanjappa, Sahyadri Narayana, and Shivamogga district hospitals.">
   <meta name="theme-color" content="#E11D48">
 
   <!-- Stylesheets & Favicon -->
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/chat.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
 </head>
 <body>
@@ -109,6 +110,17 @@
             </a>
 
             <div class="menu-dropdown-divider"></div>
+            <div class="menu-dropdown-section-title">Downloads & Documentation</div>
+            <a href="/download/presentation" class="menu-dropdown-item" download>
+              <span class="menu-dropdown-icon">📊</span>
+              <span>Download PPT Slides</span>
+            </a>
+            <a href="/download/document" class="menu-dropdown-item" download>
+              <span class="menu-dropdown-icon">📄</span>
+              <span>Download Word Doc</span>
+            </a>
+
+            <div class="menu-dropdown-divider"></div>
             <div class="menu-dropdown-section-title">Quick Actions</div>
             <a href="javascript:void(0)" class="menu-dropdown-item" onclick="window.lifedropApp.toggle3DotMenu(false); window.lifedropApp.openRequestModal();">
               <span class="menu-dropdown-icon">➕</span>
@@ -132,9 +144,9 @@
   <div class="page-title-banner">
     <div class="container page-banner-grid">
       <div>
-        <h1 class="page-banner-title">Active Emergency Blood Requests</h1>
+        <h1 class="page-banner-title">Shivamogga Emergency Cases</h1>
         <p class="page-banner-subtitle">
-          Real-time patient requirements from verified hospitals. Donors can confirm and respond immediately.
+          Real-time patient requirements from McGann Hospital, Nanjappa, Sahyadri Narayana, and Shivamogga medical centers.
         </p>
       </div>
       <div>
@@ -157,8 +169,8 @@
     <div class="glass-panel" style="padding: 32px; margin-top: 48px; max-width: 800px; margin-left: auto; margin-right: auto;">
       <div style="margin-bottom: 20px; text-align: center;">
         <span class="badge badge-emergency mb-2">Emergency Dispatch</span>
-        <h3 style="font-size: 1.4rem; margin-top: 6px;">Submit a New Blood Requirement</h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted);">Broadcast immediately to registered donors in your locality.</p>
+        <h3 style="font-size: 1.4rem; margin-top: 6px;">Submit a New Blood Requirement in Shivamogga</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">Broadcast immediately to verified donors in Shivamogga and nearby taluks.</p>
       </div>
 
       <form onsubmit="window.lifedropApp.handleQuickRequestForm(event)">
@@ -185,18 +197,18 @@
 
         <div class="input-group" style="margin-bottom: 14px;">
           <label for="pageReqPatientName">Patient Full Name *</label>
-          <input type="text" id="pageReqPatientName" name="patientName" class="form-control" placeholder="e.g. Sharadamma" required>
+          <input type="text" id="pageReqPatientName" name="patientName" class="form-control" placeholder="e.g. Sharadamma Patil" required>
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
           <div class="input-group">
-            <label for="pageReqCity">City *</label>
-            <input type="text" id="pageReqCity" name="city" class="form-control" placeholder="e.g. Shivamogga" required>
+            <label for="pageReqCity">City / District *</label>
+            <input type="text" id="pageReqCity" name="city" class="form-control" value="Shivamogga" placeholder="e.g. Shivamogga" required>
           </div>
 
           <div class="input-group">
             <label for="pageReqHospital">Hospital Name & Locality *</label>
-            <input type="text" id="pageReqHospital" name="hospital" class="form-control" placeholder="e.g. McGann Hospital" required>
+            <input type="text" id="pageReqHospital" name="hospital" class="form-control" placeholder="e.g. McGann Teaching Hospital & SIMS" required>
           </div>
         </div>
 
@@ -303,8 +315,8 @@
       <button class="suggestion-pill" onclick="window.lifedropApp.sendChatMessage('Register as a donor')">❤️ Register</button>
     </div>
     <div class="chat-input-area">
-      <input type="text" id="chat-user-input" class="chat-input-field" placeholder="Type your query...">
-      <button id="chat-send-trigger" class="chat-send-btn">➤</button>
+      <input type="text" id="chat-user-input" class="chat-input-field" placeholder="Type your query..." onkeydown="if(event.key==='Enter'){event.preventDefault();window.lifedropApp.sendChatMessage();}">
+      <button id="chat-send-trigger" class="chat-send-btn" title="Send" onclick="window.lifedropApp.sendChatMessage()">➤</button>
     </div>
   </div>
 
@@ -381,9 +393,12 @@
   <div id="toast-container" class="toast-container"></div>
 
   <!-- Scripts -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="js/data.js"></script>
+  <script src="js/api.js"></script>
   <script src="js/storage.js"></script>
   <script src="js/assistant.js"></script>
+  <script src="js/map.js"></script>
   <script src="js/tracker.js"></script>
   <script src="js/app.js"></script>
 </body>

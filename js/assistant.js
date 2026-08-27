@@ -149,7 +149,13 @@ class LifedropAssistant {
       };
     }
 
-    // 5. Medical Safety Filter & Advice Boundary Check
+    // 5. Health & Donor Benefits Knowledge Base (Science, Benefits for Donors, Recovery, Nutrition)
+    const healthKnowledge = this.matchHealthAndDonorBenefits(lower);
+    if (healthKnowledge) {
+      return healthKnowledge;
+    }
+
+    // 6. Medical Safety Filter & Advice Boundary Check
     if (this.isMedicalAdviceQuery(lower)) {
       return {
         message: "For your safety and the patient's wellbeing, please consult a certified physician or hospital staff directly regarding medical conditions, medications, or transfusion safety. Would you like to check basic donation eligibility criteria instead?",
@@ -157,7 +163,7 @@ class LifedropAssistant {
       };
     }
 
-    // 6. Blood Donation FAQs & Knowledge Base
+    // 7. Blood Donation FAQs & Knowledge Base
     const faqAnswer = this.matchFAQ(lower);
     if (faqAnswer) {
       return {
@@ -461,6 +467,59 @@ class LifedropAssistant {
   }
 
   /**
+   * Health & Donor Benefits Knowledge Engine
+   */
+  matchHealthAndDonorBenefits(lower) {
+    // 1. Health benefits for the donor
+    if ([
+      'how help donor', 'how helps donor', 'benefit of blood donation', 'benefits of donating',
+      'benefit of donating', 'benefits for donor', 'benefit for donor', 'why donate blood',
+      'why should i donate', 'advantages of donating', 'what do i get', 'does donating blood help',
+      'good for health', 'helps donor', 'healthy for donor', 'donor health benefit',
+      'what are the benefits', 'why give blood', 'impact on donor', 'help the donor', 'advantage for donor'
+    ].some(p => lower.includes(p)) && !lower.includes('receive from')) {
+      return {
+        message: "🩺 **How Blood Donation Helps the Donor (Key Health Benefits)**:\n\n1. **Free Comprehensive Mini-Health Screening**:\n   • Every donation includes blood pressure, pulse rate, temperature, and hemoglobin tests, plus screening for infectious diseases (HIV, Hep B/C, Syphilis, Malaria).\n\n2. **Stimulates Fresh Blood Cell Production (Erythropoiesis)**:\n   • Bone marrow is activated to generate fresh red blood cells, immune white cells, and platelets, enhancing oxygen delivery.\n\n3. **Cardiovascular & Blood Flow Health**:\n   • Lowers blood viscosity (thickness), reducing arterial friction and oxidative stress on blood vessel walls.\n\n4. **Balances Iron Stores & Prevents Iron Overload**:\n   • Eliminates excess toxic iron deposits, protecting arteries, liver, and heart.\n\n5. **Caloric Expenditure & Metabolism**:\n   • The body burns approximately **650 calories** synthesizing and replenishing 1 pint (450ml) of donated blood volume.\n\n6. **Psychological 'Warm Glow' & Mental Wellbeing**:\n   • Altruistic giving releases endorphins and reduces stress—every donation can **save up to 3 lives**! ❤️",
+        actions: ['❤️ Register as Donor', '🩸 Check Inventory', '❓ Eligibility Criteria', '🥗 Nutrition Tips']
+      };
+    }
+
+    // 2. Biological Cell Renewal
+    if (['bone marrow', 'cell renewal', 'how body makes blood', 'erythropoiesis', 'new blood cell', 'replenish', 'grow back', 'blood regeneration', 'how fast does blood'].some(k => lower.includes(k))) {
+      return {
+        message: "🔬 **How Your Body Replenishes Blood (Biological Renewal Timeline)**:\n\n• **Plasma / Fluid Volume (24–48 Hours)**: Restored within 1–2 days with healthy hydration.\n• **Platelets & White Blood Cells (72 Hours)**: Clotting platelets recover rapidly within 3 days.\n• **Red Blood Cells (4–6 Weeks)**: Bone marrow produces millions of fresh RBCs stimulated by erythropoietin.\n• **Iron Stores (8–12 Weeks)**: Ferritin/iron stores replenish over 8–12 weeks.",
+        actions: ['Donor Health Benefits', '🥗 Nutrition Tips', '❤️ Register as Donor']
+      };
+    }
+
+    // 3. Nutrition & Hemoglobin
+    if (['increase hemoglobin', 'raise hemoglobin', 'low hemoglobin', 'iron rich', 'what to eat', 'diet for donor', 'food before', 'food after', 'nutrition', 'vitamin c', 'boost hb'].some(k => lower.includes(k))) {
+      return {
+        message: "🥗 **Nutrition & Hemoglobin Guide for Donors**:\n\n• **Iron-Rich Foods**: Spinach, kale, lentils, chickpeas, beetroot, pomegranate, dates, jaggery, and eggs.\n• **Vitamin C Multiplier**: Pairing iron with Vitamin C (oranges, amla, lemons, tomatoes) boosts iron absorption by up to **300%**.\n• **Avoid with Meals**: Tea and coffee inhibit iron absorption.\n• **Pre-Donation**: Drink 500ml water, eat 2–3 hours prior, and avoid alcohol for 24h.",
+        actions: ['Donor Health Benefits', '❓ Eligibility Criteria', '❤️ Register as Donor']
+      };
+    }
+
+    // 4. Blood Components & Donation Types
+    if (['blood component', 'platelet donation', 'plasma donation', 'apheresis', 'what is plasma', 'what are platelet', 'cryoprecipitate', 'sdp'].some(k => lower.includes(k))) {
+      return {
+        message: "🩸 **Blood Components & Specialized Donation Types**:\n\n1. **Whole Blood**: Standard 450ml donation separated into RBCs, platelets, and plasma (every 90/120 days).\n2. **Platelet Donation (Apheresis / SDP)**: Critical for cancer, leukemia, and dengue patients. Can donate **every 15 days** (up to 24 times/year)!\n3. **Plasma (FFP)**: Rich in antibodies and clotting factors; essential for burn, trauma, and shock victims.\n4. **Packed Red Cells (PRBC)**: Concentrated red cells for acute anemia and surgeries.",
+        actions: ['Find Platelet Donors', '🩸 Check Inventory', '🚨 Urgent Blood Request']
+      };
+    }
+
+    // 5. Common Medical Conditions
+    if (['blood pressure', 'hypertension', 'diabetes', 'diabetic', 'thyroid', 'tattoo', 'alcohol', 'smoking', 'smoker', 'piercing', 'vaccine'].some(k => lower.includes(k))) {
+      return {
+        message: "📋 **Health Conditions & Blood Donation Eligibility**:\n\n• **Blood Pressure**: Eligible if BP is between 90/50 and 180/100 mmHg on donation day.\n• **Diabetes**: Eligible if blood sugar is well-controlled via diet or oral medication.\n• **Thyroid**: Eligible if on stable hormone replacement (e.g. Levothyroxine) and asymptomatic.\n• **Tattoos & Piercings**: Eligible **6 months** after getting inked at a licensed studio.\n• **Alcohol / Smoking**: Avoid alcohol 24h prior; avoid smoking 2h before & after donation.",
+        actions: ['❓ Eligibility Criteria', 'Donor Health Benefits', '❤️ Register as Donor']
+      };
+    }
+
+    return null;
+  }
+
+  /**
    * Medical Advice Safety Filter
    */
   isMedicalAdviceQuery(lower) {
@@ -468,7 +527,7 @@ class LifedropAssistant {
       'hiv', 'hepatitis', 'cancer', 'chemotherapy', 'diabetes insulin',
       'can i donate if i have', 'is it safe for patient', 'transfusion reaction',
       'blood mismatch risk', 'heart disease', 'pregnancy', 'pregnant', 'abortion',
-      'tattoo', 'surgery recently', 'antibiotics', 'covid vaccine', 'medicine'
+      'surgery recently', 'antibiotics', 'medicine'
     ];
     return medicalKeywords.some(k => lower.includes(k));
   }
@@ -516,9 +575,13 @@ class LifedropAssistant {
 
   extractLocation(text) {
     const knownCities = [
-      'Shivamogga', 'Shimoga', 'Bengaluru', 'Bangalore', 'Mysuru', 'Mysore',
-      'Hubballi', 'Hubli', 'Mangaluru', 'Mangalore', 'Mumbai', 'Pune', 'Chennai',
-      'Delhi', 'Hyderabad', 'Koramangala', 'Indiranagar', 'Jayanagar', 'Whitefield'
+      'Shivamogga', 'Shimoga', 'Durgigudi', 'Gopala', 'Vinoba Nagara', 'Vinoba Nagar',
+      'Gandhi Nagara', 'Gandhi Nagar', 'Tilak Nagara', 'Tilak Nagar', 'Vidyanagara', 'Vidyanagar',
+      'Kuvempu Road', 'Savalanga Road', 'Savalanga', 'Purle', 'Harakere', 'Alkola', 'Jayanagara',
+      'NT Road', 'Jail Road', 'Sagara', 'Sagar', 'Bhadravathi', 'Bhadravati', 'Thirthahalli',
+      'Tirthahalli', 'Shikaripura', 'Shikaripur', 'Soraba', 'Sorab', 'Hosanagara', 'Hosanagar',
+      'McGann', 'SIMS', 'Sahyadri', 'Nanjappa', 'Subbaiah', 'Rotary', 'Max Hospital',
+      'District Hospital', 'KIMS', 'Bengaluru', 'Mumbai', 'Pune', 'Mysuru', 'Mangaluru', 'Chennai'
     ];
     for (const city of knownCities) {
       if (new RegExp(`\\b${city}\\b`, 'i').test(text)) {
@@ -535,7 +598,19 @@ class LifedropAssistant {
       urgency: /emergency|immediate|urgent|critical/i.test(text) ? 'Emergency' : null
     };
   }
+
+  processUserInput(rawInput) {
+    const res = this.processMessage(rawInput);
+    if (res && typeof res.then === 'function') {
+      return res;
+    }
+    if (res && res.actions && !res.quickReplies) {
+      res.quickReplies = res.actions;
+    }
+    return res;
+  }
 }
 
 // Global instance
 window.lifedropAssistant = new LifedropAssistant();
+

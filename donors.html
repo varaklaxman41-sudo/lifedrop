@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lifedrop | Verified Blood Donor Directory</title>
-  <meta name="description" content="Search verified blood donors by blood group and city. Direct contact for emergency blood transfusions.">
+  <title>Lifedrop Shivamogga | Verified Blood Donors Directory</title>
+  <meta name="description" content="Search verified blood donors across Shivamogga, Durgigudi, Gopala, Vinoba Nagara, Vidyanagara, Sagara, Bhadravathi, and surrounding taluks. Direct contact for emergency transfusions.">
   <meta name="theme-color" content="#E11D48">
 
   <!-- Stylesheets & Favicon -->
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/chat.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
 </head>
 <body>
@@ -109,6 +110,17 @@
             </a>
 
             <div class="menu-dropdown-divider"></div>
+            <div class="menu-dropdown-section-title">Downloads & Documentation</div>
+            <a href="/download/presentation" class="menu-dropdown-item" download>
+              <span class="menu-dropdown-icon">📊</span>
+              <span>Download PPT Slides</span>
+            </a>
+            <a href="/download/document" class="menu-dropdown-item" download>
+              <span class="menu-dropdown-icon">📄</span>
+              <span>Download Word Doc</span>
+            </a>
+
+            <div class="menu-dropdown-divider"></div>
             <div class="menu-dropdown-section-title">Quick Actions</div>
             <a href="javascript:void(0)" class="menu-dropdown-item" onclick="window.lifedropApp.toggle3DotMenu(false); window.lifedropApp.openRequestModal();">
               <span class="menu-dropdown-icon">➕</span>
@@ -132,9 +144,9 @@
   <div class="page-title-banner">
     <div class="container page-banner-grid">
       <div>
-        <h1 class="page-banner-title">Verified Blood Donors Directory</h1>
+        <h1 class="page-banner-title">Shivamogga Verified Donors</h1>
         <p class="page-banner-subtitle">
-          Find and connect directly with ready-to-donate volunteers. Filter by blood type, city, or locality.
+          Find and connect directly with ready-to-donate volunteers across Shivamogga city and taluks. Filter by blood type or local area.
         </p>
       </div>
       <div>
@@ -151,7 +163,7 @@
     <!-- Filters & Controls Bar -->
     <div class="directory-controls">
       <div class="blood-filter-group">
-        <button type="button" class="filter-chip active" onclick="window.lifedropApp.setBloodFilter('ALL', this)">All Blood Groups</button>
+        <button type="button" class="filter-chip active" onclick="window.lifedropApp.setBloodFilter('ALL', this)">All Groups</button>
         <button type="button" class="filter-chip" onclick="window.lifedropApp.setBloodFilter('O+', this)">O+</button>
         <button type="button" class="filter-chip" onclick="window.lifedropApp.setBloodFilter('O-', this)">O- (Universal)</button>
         <button type="button" class="filter-chip" onclick="window.lifedropApp.setBloodFilter('A+', this)">A+</button>
@@ -163,7 +175,7 @@
       </div>
 
       <div style="min-width: 280px;">
-        <input type="text" class="form-control" placeholder="🔍 Search city, area or donor name..." oninput="window.lifedropApp.handleCityFilter(this.value)">
+        <input type="text" class="form-control" placeholder="🔍 Search Shivamogga locality (e.g. Durgigudi, Gopala, Vinoba Nagar)..." oninput="window.lifedropApp.handleCityFilter(this.value)">
       </div>
     </div>
 
@@ -253,8 +265,8 @@
       <button class="suggestion-pill" onclick="window.lifedropApp.sendChatMessage('Register as a donor')">❤️ Register</button>
     </div>
     <div class="chat-input-area">
-      <input type="text" id="chat-user-input" class="chat-input-field" placeholder="Type your query...">
-      <button id="chat-send-trigger" class="chat-send-btn">➤</button>
+      <input type="text" id="chat-user-input" class="chat-input-field" placeholder="Type your query..." onkeydown="if(event.key==='Enter'){event.preventDefault();window.lifedropApp.sendChatMessage();}">
+      <button id="chat-send-trigger" class="chat-send-btn" title="Send" onclick="window.lifedropApp.sendChatMessage()">➤</button>
     </div>
   </div>
 
@@ -331,9 +343,12 @@
   <div id="toast-container" class="toast-container"></div>
 
   <!-- Scripts -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="js/data.js"></script>
+  <script src="js/api.js"></script>
   <script src="js/storage.js"></script>
   <script src="js/assistant.js"></script>
+  <script src="js/map.js"></script>
   <script src="js/tracker.js"></script>
   <script src="js/app.js"></script>
 </body>

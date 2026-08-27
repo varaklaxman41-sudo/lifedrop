@@ -2083,4 +2083,278 @@ input:checked + .slider:before {
   border-radius: var(--radius-full);
 }
 
+/* --- Donor Live Emergency Navigation Map Modal --- */
+.donor-nav-modal-container {
+  max-width: 880px;
+  width: 100%;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg), 0 0 30px rgba(230, 57, 70, 0.15);
+}
+
+.donor-nav-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-glass);
+  padding-bottom: 12px;
+}
+
+.donor-nav-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.donor-nav-subtitle {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  margin: 0;
+}
+
+.nav-beacon-icon {
+  font-size: 1.6rem;
+  animation: pulse-ring 1.8s infinite;
+}
+
+.donor-nav-hud {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+}
+
+.hud-stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hud-stat-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-dim);
+  font-weight: 700;
+}
+
+.hud-stat-val {
+  font-size: 0.95rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.donor-map-wrapper {
+  position: relative;
+  height: 350px;
+  width: 100%;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border-glass);
+  background: var(--bg-base);
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.4);
+}
+
+.donor-leaflet-map {
+  width: 100%;
+  height: 100%;
+}
+
+.donor-map-floating-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 999;
+  background: rgba(15, 23, 42, 0.88);
+  border: 1px solid rgba(230, 57, 70, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-size: 0.78rem;
+  color: #fff;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+}
+
+.donor-map-floating-badge.hidden {
+  display: none;
+}
+
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  background: #10b981;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #10b981;
+  animation: pulse-ring 1.5s infinite;
+}
+
+/* Custom Marker CSS Beacons */
+.donor-pulse-beacon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+}
+
+.donor-inner-dot {
+  font-size: 18px;
+  z-index: 2;
+}
+
+.beacon-ring {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(59, 130, 246, 0.35);
+  border: 2px solid #3b82f6;
+  animation: beacon-ripple 2s infinite ease-out;
+  z-index: 1;
+}
+
+.hospital-pulse-beacon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+}
+
+.hospital-inner-dot {
+  font-size: 22px;
+  z-index: 2;
+}
+
+.hospital-beacon-ring {
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(230, 57, 70, 0.35);
+  border: 2px solid #e63946;
+  animation: beacon-ripple 1.6s infinite ease-out;
+  z-index: 1;
+}
+
+@keyframes beacon-ripple {
+  0% {
+    transform: scale(0.6);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+/* SVG Radar Fallback Canvas */
+.svg-vector-map-canvas {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at center, #1e293b, #0f172a);
+}
+
+/* Turn-by-Turn Guidance Container */
+.donor-turn-directions {
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.turn-steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.turn-step-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.82rem;
+  color: var(--text-main);
+  padding-bottom: 6px;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.06);
+}
+
+.turn-step-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.turn-step-icon {
+  font-size: 1rem;
+}
+
+.turn-step-text {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.turn-step-dist {
+  font-size: 0.74rem;
+  color: var(--text-dim);
+  font-weight: 700;
+  margin-left: 8px;
+}
+
+/* Actions Grid */
+.donor-nav-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.donor-nav-actions-grid .btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 0.85rem;
+  padding: 10px 14px;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .donor-nav-hud {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .donor-nav-actions-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .donor-map-wrapper {
+    height: 270px;
+  }
+}
+
 

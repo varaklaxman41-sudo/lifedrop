@@ -90,24 +90,26 @@ const LIFEDROP_DATA = {
     }
   ],
 
-  // Blood Bank Inventory Live Status
+  // Blood Bank Inventory Live Status (Shivamogga District Center)
   inventory: [
-    { bloodGroup: 'O+', unitsAvailable: 142, dailyDemand: 45, status: 'Stable', capacityPct: 75 },
-    { bloodGroup: 'O-', unitsAvailable: 18, dailyDemand: 32, status: 'Critical', capacityPct: 22 },
-    { bloodGroup: 'A+', unitsAvailable: 98, dailyDemand: 28, status: 'Stable', capacityPct: 68 },
-    { bloodGroup: 'A-', unitsAvailable: 24, dailyDemand: 16, status: 'Low', capacityPct: 35 },
-    { bloodGroup: 'B+', unitsAvailable: 110, dailyDemand: 34, status: 'Stable', capacityPct: 80 },
-    { bloodGroup: 'B-', unitsAvailable: 14, dailyDemand: 12, status: 'Critical', capacityPct: 20 },
-    { bloodGroup: 'AB+', unitsAvailable: 65, dailyDemand: 10, status: 'Good', capacityPct: 90 },
-    { bloodGroup: 'AB-', unitsAvailable: 9, dailyDemand: 8, status: 'Critical', capacityPct: 15 }
+    { bloodGroup: 'O+', unitsAvailable: 86, dailyDemand: 28, status: 'Stable', capacityPct: 75 },
+    { bloodGroup: 'O-', unitsAvailable: 12, dailyDemand: 22, status: 'Critical', capacityPct: 20 },
+    { bloodGroup: 'A+', unitsAvailable: 64, dailyDemand: 18, status: 'Stable', capacityPct: 68 },
+    { bloodGroup: 'A-', unitsAvailable: 14, dailyDemand: 11, status: 'Low', capacityPct: 35 },
+    { bloodGroup: 'B+', unitsAvailable: 78, dailyDemand: 24, status: 'Stable', capacityPct: 80 },
+    { bloodGroup: 'B-', unitsAvailable: 9, dailyDemand: 8, status: 'Critical', capacityPct: 18 },
+    { bloodGroup: 'AB+', unitsAvailable: 38, dailyDemand: 9, status: 'Stable', capacityPct: 65 },
+    { bloodGroup: 'AB-', unitsAvailable: 5, dailyDemand: 6, status: 'Critical', capacityPct: 15 }
   ],
 
-  // Emergency Helplines
+  // Shivamogga Emergency Helplines & Blood Banks
   helplines: [
-    { name: 'National Blood Transfusion Council', number: '104' },
-    { name: 'Emergency Medical Service', number: '108' },
-    { name: 'Indian Red Cross Blood Bank', number: '011-23711551' },
-    { name: 'Lifedrop Rapid 24/7 SOS Desk', number: '1800-LIFEDROP' }
+    { name: 'McGann Teaching Hospital & SIMS Blood Bank', number: '08182-222233' },
+    { name: 'District Government Hospital Shivamogga', number: '08182-222444' },
+    { name: 'Sahyadri Narayana Hospital Blood Centre', number: '08182-244555' },
+    { name: 'Rotary Blood Bank Shivamogga (Durgigudi)', number: '08182-277888' },
+    { name: 'Indian Red Cross Society Shivamogga', number: '08182-225678' },
+    { name: 'Karnataka Emergency Medical Ambulance', number: '108' }
   ]
 };
 

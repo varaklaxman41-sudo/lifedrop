@@ -43,8 +43,10 @@ def test_files():
         "c:/Users/Dell/lifedrop/css/style.css",
         "c:/Users/Dell/lifedrop/css/chat.css",
         "c:/Users/Dell/lifedrop/js/data.js",
+        "c:/Users/Dell/lifedrop/js/api.js",
         "c:/Users/Dell/lifedrop/js/storage.js",
         "c:/Users/Dell/lifedrop/js/assistant.js",
+        "c:/Users/Dell/lifedrop/js/map.js",
         "c:/Users/Dell/lifedrop/js/tracker.js",
         "c:/Users/Dell/lifedrop/js/app.js",
     ]

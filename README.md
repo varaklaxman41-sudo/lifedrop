@@ -22,20 +22,41 @@ Once published, you can access the live application directly via GitHub Pages:
 
 ---
 
-## 💻 Local Setup
+## 💻 Full-Stack Local Setup & Backend
 
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/<your-username>/lifedrop.git
-   cd lifedrop
-   ```
+### 1. Start the Python + Flask Backend Server & Database
+```bash
+# Start backend server & SQLite database (serves REST API & static frontend)
+python backend/server.py
+```
+> Server runs on **`http://127.0.0.1:5000`** with live database `lifedrop.db`.
 
-2. **Run locally with Python**:
-   ```bash
-   python -m http.server 8080
-   ```
+### 2. Optional: Reset / Re-seed Database
+```bash
+python backend/seed.py
+```
 
-3. Open **`http://localhost:8080`** in your browser.
+### 3. Run Backend Test Suite
+```bash
+python -m unittest tests/test_backend.py
+```
+
+---
+
+## 🗄️ Database & REST API Architecture
+
+* **Database**: Embedded relational **SQLite3** (`lifedrop.db`)
+* **Backend Framework**: Python 3 + Flask + Flask-CORS
+* **Key API Endpoints**:
+  * `GET /api/health` - Backend status and health
+  * `GET /api/stats` - Live donor metrics, active requests, lives saved
+  * `GET /api/donors` - Filter donors by blood type, city, availability
+  * `POST /api/donors` - Register new verified donor
+  * `GET /api/donors/match?bloodGroup=...&city=...` - Real-time compatible donor search
+  * `GET /api/requests` - Active emergency blood requests feed
+  * `POST /api/requests` - Submit urgent request + trigger automated donor alerts
+  * `GET /api/requests/<id>` - Live request tracker with dispatch timeline
+  * `GET /api/inventory` - Blood bank inventory stock levels
 
 ---
 
@@ -43,6 +64,14 @@ Once published, you can access the live application directly via GitHub Pages:
 
 ```text
 lifedrop/
+├── lifedrop.db           # SQLite Relational Database
+├── backend/
+│   ├── db.py             # Schema initialization & connection factory
+│   ├── models.py         # Business logic, SQL queries & compatibility engine
+│   ├── server.py         # Flask REST API & static file host
+│   └── seed.py           # Database seeder utility
+├── tests/
+│   └── test_backend.py   # Unit & Integration test suite
 ├── index.html            # Main Landing & Emergency Portal
 ├── dashboard.html        # Emergency Metrics & Case Overview
 ├── donors.html           # Verified Donor Directory & Filters
@@ -54,9 +83,10 @@ lifedrop/
 │   ├── style.css         # Main Design System & UI Styling
 │   └── chat.css          # Assistant & Chatbot Interface
 ├── js/
+│   ├── api.js            # REST API Client & Server Sync Layer
 │   ├── app.js            # Core App Orchestration & Interactivity
 │   ├── data.js           # Blood Group Data & Initial Registry
-│   ├── storage.js        # Local Persistence & State Manager
+│   ├── storage.js        # Hybrid State Manager (SQLite + Offline Fallback)
 │   ├── assistant.js      # Lifedrop AI Assistant Bot Logic
 │   └── tracker.js        # Dispatch Pipeline & Status Engine
 └── assets/               # Logos, Icons & Vector Graphics

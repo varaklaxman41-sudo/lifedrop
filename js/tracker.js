@@ -103,11 +103,15 @@ class LifedropTracker {
   /**
    * --- 2. Live Request Tracker Component ---
    */
-  trackRequest(reqId) {
+  async trackRequest(reqId) {
     const resultContainer = document.getElementById('tracker-result-card');
     if (!resultContainer) return;
 
-    const req = window.lifedropStorage.getRequestById(reqId);
+    let req = window.lifedropStorage.getRequestById(reqId);
+    if (!req && window.lifedropStorage.getRequestByIdAsync) {
+      req = await window.lifedropStorage.getRequestByIdAsync(reqId);
+    }
+
     if (!req) {
       resultContainer.innerHTML = `
         <div class="tracker-empty-state">
@@ -180,11 +184,14 @@ class LifedropTracker {
         </div>
 
         <div class="tracker-actions">
-          <button class="btn btn-secondary btn-sm" onclick="window.lifedropApp.openEmergencyChat('${req.id}')">
-            💬 Speak with Lifedrop Assistant
+          <button type="button" class="btn btn-primary btn-sm" onclick="window.lifedropMap && window.lifedropMap.openNavigationModal(window.lifedropStorage.getRequestById('${req.id}') || {id: '${req.id}', hospital: '${escapeHTML(req.hospital)}', city: '${escapeHTML(req.city)}', bloodGroup: '${req.bloodGroup}', patientName: '${escapeHTML(req.patientName)}', units: ${req.units || 1}})">
+            🗺️ Live Route to Hospital
+          </button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="window.lifedropApp.openEmergencyChat('${req.id}')">
+            💬 Assistant
           </button>
           <a href="tel:${req.contactPhone || '108'}" class="btn btn-outline btn-sm">
-            📞 Call Hospital Coordinator
+            📞 Call Hospital
           </a>
         </div>
       </div>

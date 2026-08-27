@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lifedrop | Volunteer Donor Registration & Hero Pass</title>
-  <meta name="description" content="Register as a volunteer blood donor on Lifedrop and get your official digital Hero Card pass.">
+  <title>Lifedrop Shivamogga | Volunteer Donor Registration & Hero Pass</title>
+  <meta name="description" content="Register as a volunteer blood donor in Shivamogga, Sagara, Bhadravathi, and surrounding taluks. Get your official digital Hero Card pass.">
   <meta name="theme-color" content="#E11D48">
 
   <!-- Stylesheets & Favicon -->
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/chat.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
 </head>
 <body>
@@ -109,6 +110,17 @@
             </a>
 
             <div class="menu-dropdown-divider"></div>
+            <div class="menu-dropdown-section-title">Downloads & Documentation</div>
+            <a href="/download/presentation" class="menu-dropdown-item" download>
+              <span class="menu-dropdown-icon">📊</span>
+              <span>Download PPT Slides</span>
+            </a>
+            <a href="/download/document" class="menu-dropdown-item" download>
+              <span class="menu-dropdown-icon">📄</span>
+              <span>Download Word Doc</span>
+            </a>
+
+            <div class="menu-dropdown-divider"></div>
             <div class="menu-dropdown-section-title">Quick Actions</div>
             <a href="javascript:void(0)" class="menu-dropdown-item" onclick="window.lifedropApp.toggle3DotMenu(false); window.lifedropApp.openRequestModal();">
               <span class="menu-dropdown-icon">➕</span>
@@ -132,9 +144,9 @@
   <div class="page-title-banner">
     <div class="container page-banner-grid">
       <div>
-        <h1 class="page-banner-title">Volunteer Donor Registration & Hero Pass</h1>
+        <h1 class="page-banner-title">Shivamogga Donor Registration & Hero Pass</h1>
         <p class="page-banner-subtitle">
-          Join our rapid emergency network. Create or update your profile to generate your official digital Lifedrop Hero ID pass.
+          Join Shivamogga's volunteer emergency network. Create or update your profile to generate your official digital Lifedrop Hero ID pass.
         </p>
       </div>
       <div>
@@ -152,13 +164,13 @@
       
       <!-- Registration Form Card -->
       <div class="glass-panel" style="padding: 28px;">
-        <h3 style="font-size: 1.25rem; margin-bottom: 16px;">Volunteer Donor Registration Form</h3>
+        <h3 style="font-size: 1.25rem; margin-bottom: 16px;">Shivamogga Donor Registration</h3>
 
         <form id="donor-registration-form" onsubmit="window.lifedropApp.handleDonorRegisterForm(event)">
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
             <div class="input-group">
               <label for="donorName">Full Name *</label>
-              <input type="text" id="donorName" name="donorName" class="form-control" placeholder="e.g. Dr. Rajesh Kumar" required>
+              <input type="text" id="donorName" name="donorName" class="form-control" placeholder="e.g. Prajwal Gowda" required>
             </div>
 
             <div class="input-group">
@@ -178,13 +190,13 @@
 
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
             <div class="input-group">
-              <label for="donorCity">City *</label>
-              <input type="text" id="donorCity" name="donorCity" class="form-control" placeholder="e.g. Shivamogga" required>
+              <label for="donorCity">City / District *</label>
+              <input type="text" id="donorCity" name="donorCity" class="form-control" value="Shivamogga" placeholder="e.g. Shivamogga" required>
             </div>
 
             <div class="input-group">
-              <label for="donorArea">Area / Locality</label>
-              <input type="text" id="donorArea" name="donorArea" class="form-control" placeholder="e.g. Vidyanagar">
+              <label for="donorArea">Area / Locality *</label>
+              <input type="text" id="donorArea" name="donorArea" class="form-control" placeholder="e.g. Durgigudi, Gopala, Vinoba Nagar" required>
             </div>
           </div>
 
@@ -312,8 +324,8 @@
       <button class="suggestion-pill" onclick="window.lifedropApp.sendChatMessage('🚨 Urgent blood request')">🚨 Emergency</button>
     </div>
     <div class="chat-input-area">
-      <input type="text" id="chat-user-input" class="chat-input-field" placeholder="Type your query...">
-      <button id="chat-send-trigger" class="chat-send-btn">➤</button>
+      <input type="text" id="chat-user-input" class="chat-input-field" placeholder="Type your query..." onkeydown="if(event.key==='Enter'){event.preventDefault();window.lifedropApp.sendChatMessage();}">
+      <button id="chat-send-trigger" class="chat-send-btn" title="Send" onclick="window.lifedropApp.sendChatMessage()">➤</button>
     </div>
   </div>
 
@@ -390,9 +402,12 @@
   <div id="toast-container" class="toast-container"></div>
 
   <!-- Scripts -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="js/data.js"></script>
+  <script src="js/api.js"></script>
   <script src="js/storage.js"></script>
   <script src="js/assistant.js"></script>
+  <script src="js/map.js"></script>
   <script src="js/tracker.js"></script>
   <script src="js/app.js"></script>
 </body>
