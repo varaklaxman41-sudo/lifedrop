@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-color-theme="luxury-light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lifedrop | Operations & Emergency Dashboard</title>
+  <meta name="description" content="Lifedrop Emergency Operations Dashboard - Real-time donor activity, live blood inventory levels, and dispatch control.">
+  <meta name="theme-color" content="#E11D48">
+
+  <!-- Stylesheets & Favicon -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/chat.css">
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+</head>
+<body>
+
+  <!-- Ambient Subtle Background Glow -->
+  <div class="bg-ambient-glow">
+    <div class="glow-orb-1"></div>
+    <div class="glow-orb-2"></div>
+  </div>
+
+  <!-- Top Navigation Header -->
+  <header class="site-header">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        <img src="assets/logo.svg" alt="Lifedrop Logo" class="brand-logo-img">
+        <span class="logo-text">Life<span>drop</span></span>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="dashboard.html" class="active">📊 Dashboard</a></li>
+          <li><a href="donors.html">Find Donors</a></li>
+          <li><a href="requests.html">Emergency Cases</a></li>
+          <li><a href="compatibility.html">Compatibility</a></li>
+          <li><a href="register.html">Hero Card</a></li>
+          <li><a href="tracker.html">Track Status</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <!-- Aesthetic Color Palette Selector -->
+        <div class="theme-picker-wrap" title="Change Theme Palette">
+          <button type="button" class="theme-swatch-btn swatch-light active" data-color="luxury-light" title="Clean White Theme" onclick="window.lifedropApp.setColorTheme('luxury-light')"></button>
+          <button type="button" class="theme-swatch-btn swatch-royal" data-color="royal-aurora" title="Midnight Ruby" onclick="window.lifedropApp.setColorTheme('royal-aurora')"></button>
+          <button type="button" class="theme-swatch-btn swatch-neon" data-color="neon-crimson" title="Obsidian Crimson" onclick="window.lifedropApp.setColorTheme('neon-crimson')"></button>
+          <button type="button" class="theme-swatch-btn swatch-vitality" data-color="vitality-emerald" title="Bio Mint" onclick="window.lifedropApp.setColorTheme('vitality-emerald')"></button>
+        </div>
+
+        <!-- Active User Profile Pill -->
+        <div id="nav-user-badge" class="nav-user-badge" onclick="window.lifedropApp.openProfileModal()" title="View Your Profile">
+          <div class="nav-user-avatar" id="nav-user-initials">👤</div>
+          <span id="nav-user-name">Guest / Sign In</span>
+        </div>
+
+        <!-- Logout Button (Shown when logged in) -->
+        <button id="nav-logout-btn" class="btn-logout hidden" onclick="window.lifedropApp.handleLogout()" title="Log out of this session">
+          🚪 Logout
+        </button>
+
+        <button class="btn btn-secondary btn-sm" onclick="window.lifedropApp.openEmergencyChat()">
+          💬 Assistant
+        </button>
+        <button class="btn btn-emergency btn-sm" onclick="window.lifedropApp.openRequestModal()">
+          🚨 Need Blood
+        </button>
+
+        <!-- 3-Dot Overflow Menu Feature -->
+        <div class="nav-3dot-wrap">
+          <button type="button" id="btn-3dot-menu" class="btn-3dot-menu" onclick="window.lifedropApp.toggle3DotMenu()" title="More Pages & Features">
+            ⋮
+          </button>
+          
+          <div id="nav-3dot-dropdown" class="menu-3dot-dropdown">
+            <div class="menu-dropdown-section-title">Platform Pages</div>
+            <a href="index.html" class="menu-dropdown-item">
+              <span class="menu-dropdown-icon">🏠</span>
+              <span>Home Portal</span>
+            </a>
+            <a href="dashboard.html" class="menu-dropdown-item">
+              <span class="menu-dropdown-icon">📊</span>
+              <span>Emergency Dashboard</span>
+              <span class="badge badge-emergency menu-dropdown-badge">Live</span>
+            </a>
+            <a href="donors.html" class="menu-dropdown-item">
+              <span class="menu-dropdown-icon">🔍</span>
+              <span>Find Verified Donors</span>
+            </a>
+            <a href="requests.html" class="menu-dropdown-item">
+              <span class="menu-dropdown-icon">🚨</span>
+              <span>Emergency Blood Cases</span>
+            </a>
+
+            <div class="menu-dropdown-divider"></div>
+            <div class="menu-dropdown-section-title">Medical & Donor Tools</div>
+            <a href="compatibility.html" class="menu-dropdown-item">
+              <span class="menu-dropdown-icon">🧬</span>
+              <span>Compatibility & Quiz</span>
+            </a>
+            <a href="register.html" class="menu-dropdown-item">
+              <span class="menu-dropdown-icon">🪪</span>
+              <span>Digital Hero Pass</span>
+            </a>
+            <a href="tracker.html" class="menu-dropdown-item">
+              <span class="menu-dropdown-icon">📍</span>
+              <span>Live Request Tracker</span>
+            </a>
+
+            <div class="menu-dropdown-divider"></div>
+            <div class="menu-dropdown-section-title">Quick Actions</div>
+            <a href="javascript:void(0)" class="menu-dropdown-item" onclick="window.lifedropApp.toggle3DotMenu(false); window.lifedropApp.openRequestModal();">
+              <span class="menu-dropdown-icon">➕</span>
+              <span>Post Blood Request</span>
+            </a>
+            <a href="javascript:void(0)" class="menu-dropdown-item" onclick="window.lifedropApp.toggle3DotMenu(false); window.lifedropApp.openEmergencyChat();">
+              <span class="menu-dropdown-icon">💬</span>
+              <span>Ask Lifedrop AI</span>
+            </a>
+            <a href="javascript:void(0)" class="menu-dropdown-item" onclick="window.lifedropApp.toggle3DotMenu(false); window.lifedropApp.openProfileModal();">
+              <span class="menu-dropdown-icon">👤</span>
+              <span>Profile / Account</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page Header Banner -->
+  <div class="page-title-banner">
+    <div class="container page-banner-grid">
+      <div>
+        <h1 class="page-banner-title">Emergency Operations Dashboard</h1>
+        <p class="page-banner-subtitle">
+          Live telemetry on community blood donor availability, real-time hospital dispatch requests, and regional blood inventory reserves.
+        </p>
+      </div>
+      <div>
+        <button class="btn btn-primary" onclick="window.lifedropApp.openRequestModal()">
+          🚨 Broadcast Emergency Request
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dashboard Content Container -->
+  <main class="container">
+    
+    <!-- 1. Key Metrics Cards Grid -->
+    <div class="dashboard-metrics-grid">
+      <div class="metric-card">
+        <div class="metric-icon-box metric-icon-red">🩸</div>
+        <div class="metric-info">
+          <span class="metric-number" id="dash-metric-donors">154</span>
+          <span class="metric-label">Verified Donors</span>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-icon-box metric-icon-amber">⚡</div>
+        <div class="metric-info">
+          <span class="metric-number" id="dash-metric-requests">4</span>
+          <span class="metric-label">Active Emergency Cases</span>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-icon-box metric-icon-green">❤️</div>
+        <div class="metric-info">
+          <span class="metric-number" id="dash-metric-lives">1,120+</span>
+          <span class="metric-label">Lives Saved</span>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-icon-box metric-icon-blue">📦</div>
+        <div class="metric-info">
+          <span class="metric-number" id="dash-metric-units">480</span>
+          <span class="metric-label">Units Dispatched</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Dashboard 2-Column Main Section -->
+    <div class="dashboard-main-grid">
+      
+      <!-- Left Column: Blood Bank Inventory & Operations Center -->
+      <div>
+        
+        <!-- Live Blood Stock Section -->
+        <div class="glass-panel" style="padding: 24px; margin-bottom: 28px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+            <div>
+              <h3 style="font-size: 1.2rem;">Live Blood Bank Inventory Stock</h3>
+              <p style="font-size: 0.82rem; color: var(--text-muted);">Current regional reserves and reserve status across verified blood banks.</p>
+            </div>
+            <span class="badge badge-success">● Live Sync</span>
+          </div>
+
+          <div class="inventory-stock-grid" id="dash-inventory-container">
+            <!-- Dynamically populated by app.js -->
+          </div>
+        </div>
+
+        <!-- Emergency Dispatch Operations Table -->
+        <div class="ops-table-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <div>
+              <h3 style="font-size: 1.2rem;">Emergency Dispatch Control Center</h3>
+              <p style="font-size: 0.82rem; color: var(--text-muted);">Real-time hospital alerts and volunteer donor coordination status.</p>
+            </div>
+            <a href="requests.html" class="btn btn-secondary btn-sm">View All Cases →</a>
+          </div>
+
+          <table class="ops-table">
+            <thead>
+              <tr>
+                <th>Request ID</th>
+                <th>Group</th>
+                <th>Patient</th>
+                <th>Hospital & City</th>
+                <th>Urgency</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="dash-ops-tbody">
+              <!-- Dynamically populated by app.js -->
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Personal Activity Hub & Quick Actions -->
+      <div>
+        
+        <!-- User Personal Hub Card -->
+        <div class="user-hub-card">
+          <div class="user-profile-header">
+            <div class="user-hub-avatar" id="dash-user-avatar">👤</div>
+            <div>
+              <h4 id="dash-user-name" style="font-size: 1.1rem;">Guest Volunteer</h4>
+              <p id="dash-user-blood" style="font-size: 0.82rem; color: var(--text-muted);">Sign In to Sync Pass</p>
+            </div>
+          </div>
+
+          <!-- Availability Switch -->
+          <div class="availability-toggle-box">
+            <div>
+              <strong style="font-size: 0.88rem;">Ready to Donate</strong>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">Receive immediate emergency alerts</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" checked onchange="window.lifedropApp.toggleAvailability(this)">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <!-- Quick Action Buttons -->
+          <div>
+            <div style="font-size: 0.78rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase; margin-bottom: 8px;">
+              Quick Controls
+            </div>
+            <div class="quick-action-strip">
+              <button class="action-chip-btn" onclick="window.lifedropApp.openRequestModal()">
+                🚨 Request Blood
+              </button>
+              <a href="register.html" class="action-chip-btn">
+                🪪 Hero Card
+              </a>
+              <a href="donors.html" class="action-chip-btn">
+                🔍 Find Donors
+              </a>
+              <a href="tracker.html" class="action-chip-btn">
+                📍 Track ID
+              </a>
+            </div>
+          </div>
+
+          <!-- Emergency Helplines Box -->
+          <div style="background: var(--bg-surface-elevated); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-glass);">
+            <div style="font-size: 0.85rem; font-weight: 700; color: var(--crimson-500); margin-bottom: 8px;">
+              📞 Direct Emergency Helplines
+            </div>
+            <div style="font-size: 0.8rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 6px;">
+              <div>• National Blood Helpline: <a href="tel:104" style="font-weight: 700; color: var(--text-main);">104</a></div>
+              <div>• Ambulance Emergency: <a href="tel:108" style="font-weight: 700; color: var(--text-main);">108</a></div>
+              <div>• Red Cross Bank: <a href="tel:011-23711551" style="font-weight: 700; color: var(--text-main);">011-23711551</a></div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="brand-logo">
+            <img src="assets/logo.svg" alt="Lifedrop Logo" class="brand-logo-img">
+            <span class="logo-text">Life<span>drop</span></span>
+          </a>
+          <p>
+            An open initiative dedicated to saving lives through rapid emergency blood donor matching, transparency, and verified logistics.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h5>Platform Navigation</h5>
+          <ul>
+            <li><a href="index.html">Home Portal</a></li>
+            <li><a href="dashboard.html">Emergency Dashboard</a></li>
+            <li><a href="donors.html">Verified Donors</a></li>
+            <li><a href="requests.html">Active Blood Requests</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Resources & Tools</h5>
+          <ul>
+            <li><a href="compatibility.html">Compatibility Matrix</a></li>
+            <li><a href="register.html">Digital Hero Pass</a></li>
+            <li><a href="tracker.html">Live Request Tracker</a></li>
+            <li><a href="compatibility.html#faq-section">Eligibility FAQs</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Emergency Desk</h5>
+          <ul>
+            <li><a href="tel:108">Ambulance: <strong>108</strong></a></li>
+            <li><a href="tel:104">Blood Council: <strong>104</strong></a></li>
+            <li><a href="javascript:void(0)" onclick="window.lifedropApp.openEmergencyChat()">24/7 AI Desk</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 Lifedrop Rapid Response System. Built to protect and save lives.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Assistant Widget -->
+  <button id="chat-launcher-btn" class="chat-launcher-btn" onclick="window.lifedropApp.toggleChat()">
+    <img src="assets/logo.svg" alt="Lifedrop AI" class="launcher-logo-icon">
+    <span>Lifedrop Assistant</span>
+    <span class="launcher-badge-pulse"></span>
+  </button>
+
+  <!-- Chat Window Drawer -->
+  <div id="chat-window-overlay" class="chat-window-overlay glass-panel">
+    <div class="chat-header">
+      <div class="chat-header-info">
+        <div class="chat-avatar">
+          <img src="assets/logo.svg" alt="Lifedrop AI" style="width: 20px; height: 20px;">
+        </div>
+        <div>
+          <h4 class="chat-header-title">Lifedrop Assistant</h4>
+          <span class="chat-header-status"><span class="status-dot"></span> Online & Ready</span>
+        </div>
+      </div>
+      <div class="chat-header-actions">
+        <button class="chat-header-btn" title="Reset Conversation" onclick="window.lifedropAssistant.resetState(); window.lifedropApp.appendMessage('assistant', 'Conversation restarted. How can I help you right now?', ['🚨 Urgent Blood Request', '❤️ Register as Donor', '🔍 Check Status']);">🔄</button>
+        <button class="chat-header-btn" title="Close" onclick="window.lifedropApp.toggleChat(false)">✕</button>
+      </div>
+    </div>
+    <div id="chat-messages-body" class="chat-messages-body"></div>
+    <div class="chat-suggestions-bar">
+      <button class="suggestion-pill" onclick="window.lifedropApp.sendChatMessage('🚨 Urgent blood request')">🚨 Emergency</button>
+      <button class="suggestion-pill" onclick="window.lifedropApp.sendChatMessage('Register as a donor')">❤️ Register</button>
+      <button class="suggestion-pill" onclick="window.lifedropApp.sendChatMessage('Check status REQ-1042')">🔍 Check REQ-1042</button>
+    </div>
+    <div class="chat-input-area">
+      <input type="text" id="chat-user-input" class="chat-input-field" placeholder="Type your query or request ID...">
+      <button id="chat-send-trigger" class="chat-send-btn">➤</button>
+    </div>
+  </div>
+
+  <!-- Modal: New Blood Request -->
+  <div id="modal-new-request" class="modal-overlay">
+    <div class="modal-container glass-panel">
+      <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+        <h3 class="modal-title" style="font-size: 1.25rem;">🚨 Emergency Blood Request</h3>
+        <button class="modal-close-btn" style="background: none; border: none; font-size: 1.2rem; color: var(--text-muted); cursor: pointer;" onclick="window.lifedropApp.closeModal('modal-new-request')">✕</button>
+      </div>
+
+      <form onsubmit="window.lifedropApp.handleQuickRequestForm(event)">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+          <div class="input-group">
+            <label for="reqBloodGroup">Required Blood Group *</label>
+            <select id="reqBloodGroup" name="bloodGroup" class="form-control" required>
+              <option value="O+">O+</option>
+              <option value="O-">O- (Universal)</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+            </select>
+          </div>
+
+          <div class="input-group">
+            <label for="reqUnits">Units Needed *</label>
+            <input type="number" id="reqUnits" name="units" class="form-control" value="1" min="1" max="10" required>
+          </div>
+        </div>
+
+        <div class="input-group" style="margin-bottom: 12px;">
+          <label for="reqPatientName">Patient Full Name *</label>
+          <input type="text" id="reqPatientName" name="patientName" class="form-control" placeholder="e.g. Sharadamma" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+          <div class="input-group">
+            <label for="reqCity">City *</label>
+            <input type="text" id="reqCity" name="city" class="form-control" placeholder="e.g. Shivamogga" required>
+          </div>
+
+          <div class="input-group">
+            <label for="reqHospital">Hospital Name & Area *</label>
+            <input type="text" id="reqHospital" name="hospital" class="form-control" placeholder="e.g. McGann Hospital" required>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px;">
+          <div class="input-group">
+            <label for="reqUrgency">Urgency Level *</label>
+            <select id="reqUrgency" name="urgency" class="form-control" required>
+              <option value="Emergency" selected>🚨 Emergency (< 2 hours)</option>
+              <option value="Within 24 hours">⏰ Within 24 hours</option>
+              <option value="Planned">📅 Planned Surgery</option>
+            </select>
+          </div>
+
+          <div class="input-group">
+            <label for="reqPhone">Attendant Phone *</label>
+            <input type="tel" id="reqPhone" name="contactPhone" class="form-control" placeholder="+91 98450 11223" required>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-emergency" style="width: 100%;">
+          🚨 Dispatch Request to Nearby Donors
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/assistant.js"></script>
+  <script src="js/tracker.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

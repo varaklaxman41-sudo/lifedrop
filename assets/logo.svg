@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <defs>
+    <linearGradient id="dropGrad" x1="20" y1="10" x2="100" y2="110" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FF4B63"/>
+      <stop offset="45%" stop-color="#EF233C"/>
+      <stop offset="100%" stop-color="#B7094C"/>
+    </linearGradient>
+    <linearGradient id="pulseGrad" x1="10" y1="60" x2="110" y2="60" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="50%" stop-color="#FFE5E9"/>
+      <stop offset="100%" stop-color="#FFFFFF"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Ambient Glow Drop -->
+  <path d="M60 12 C60 12 94 52 94 76 C94 95 78.8 110 60 110 C41.2 110 26 95 26 76 C26 52 60 12 60 12 Z" 
+        fill="url(#dropGrad)" 
+        filter="url(#glow)" 
+        opacity="0.35"/>
+
+  <!-- Main Blood Drop Body -->
+  <path d="M60 14 C60 14 90 52 90 74 C90 91.5 76.5 106 60 106 C43.5 106 30 91.5 30 74 C30 52 60 14 60 14 Z" 
+        fill="url(#dropGrad)"/>
+
+  <!-- Inner Highlight Specular Arc -->
+  <path d="M42 56 C38 64 36 72 36 78 C36 90 44 98 56 102" 
+        stroke="rgba(255, 255, 255, 0.4)" 
+        stroke-width="3" 
+        stroke-linecap="round"/>
+
+  <!-- Protective Orbit Arc -->
+  <path d="M22 82 C16 68 22 48 38 36" 
+        stroke="url(#dropGrad)" 
+        stroke-width="4.5" 
+        stroke-linecap="round" 
+        opacity="0.85"/>
+  <path d="M98 58 C104 74 96 94 80 104" 
+        stroke="url(#dropGrad)" 
+        stroke-width="4.5" 
+        stroke-linecap="round" 
+        opacity="0.85"/>
+
+  <!-- Electrocardiogram (ECG) Lifeline Pulse -->
+  <path d="M20 72 L38 72 L44 64 L50 82 L58 46 L66 88 L72 68 L78 74 L100 74" 
+        stroke="url(#pulseGrad)" 
+        stroke-width="4.5" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"
+        filter="url(#glow)"/>
+</svg>
